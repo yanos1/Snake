@@ -1,12 +1,14 @@
 import argparse
-import game_utils
+from game_utils import UP, DOWN,LEFT,RIGHT
 from snake_game import SnakeGame
 from game_display import GameDisplay
+from snake import Snake
 
 def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
 
     # INIT OBJECTS
     game = SnakeGame()
+    snake = Snake("black",3,UP,(5,5))
     gd.show_score(0)
 
     # DRAW BOARD
@@ -16,9 +18,15 @@ def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
         # CHECK KEY CLICKS
         key_clicked = gd.get_key_clicked()
         game.read_key(key_clicked)
+        if key_clicked:
+            snake.change_direction(key_clicked)
+            print(snake.direction)
+        snake.move_snake()
         # UPDATE OBJECTS
         game.update_objects()
         # DRAW BOARD
+        for location in snake.locations:
+            gd.draw_cell(location[0],location[1],snake.color)
         game.draw_board(gd)
         # WAIT FOR NEXT ROUND:
         game.end_round()
