@@ -1,11 +1,15 @@
 from typing import Optional
 from game_display import GameDisplay
+from apple import Apple
+from game_utils import get_random_apple_data
 
 class SnakeGame:
 
-    def __init__(self) -> None:
-        self.__x = 5
-        self.__y = 5
+    def __init__(self,) -> None:
+        self.apple_count = 0
+        self.max_apples = 3 #agrssss
+        self.apple_locations = []
+
         self.__key_clicked = None
 
     def read_key(self, key_clicked: Optional[str])-> None:
@@ -28,3 +32,4 @@ class SnakeGame:
 
     def is_over(self) -> bool:
         return False
+
