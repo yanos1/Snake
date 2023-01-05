@@ -1,18 +1,24 @@
-from snake_game import SnakeGame as sg
 from game_utils import UP, DOWN, LEFT,RIGHT
-from game_display import GameDisplay as gd
 from typing import *
-from game_display import parse_args
-#במחלקה זו ניצור אובייקט מסוג נחש.
-# לנחש יש כיוון, מיקום,צבע,
-# נממש פה תזוזה של הנחש,
+
+
 class Snake:
     def __init__(self,color, size, direction, location) -> None:
         self.color = color
         self.size = size
         self.direction = direction
         self.location = location
-        self.locations = [(5,5),(5,4),(5,3),(5,2),(5,1),(5,0)]
+        self.locations = self.build_snake(location)
+
+    def build_snake(self,location, direction=UP, snake_length=3):
+        if direction == UP:
+            return [(location[0], location[1] - i) for i in range(snake_length)]
+        elif direction == DOWN:
+            return [(location[0], location[1] + i) for i in range(snake_length)]
+        elif direction == RIGHT:
+            return [(location[0] - i, location[1]) for i in range(snake_length)]
+        elif direction == LEFT:
+            return [(location[0] + i, location[1]) for i in range(snake_length)]
 
     def move_snake(self):
         if self.direction == UP:
@@ -23,6 +29,7 @@ class Snake:
             self.location = (self.location[0]+1,self.location[1])
         else:
             self.location = (self.location[0]-1,self.location[1])
+        # actual movement
         self.locations.insert(0,self.location)
         self.locations.pop()
 
@@ -40,7 +47,7 @@ class Snake:
             return True
         return
 
-    def collision(self):
+    def self_collision(self):
         if self.locations.count(self.location) == 2:
             return True
         return False

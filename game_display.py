@@ -89,7 +89,7 @@ class GameDisplay:
             self._root.after(300, self._check_end)
 
     def _key_press(self, e: Any) -> None:
-        """
+        """pyt
         Internal: checks which key was clicked in the event
         :param e:event
         :return:None
