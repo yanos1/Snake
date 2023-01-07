@@ -7,7 +7,7 @@ from game_display import GameDisplay
 
 
 def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
-
+    #####check
     # INIT OBJECTS
     game = SnakeGame(args.width, args.height, args.apples)
     game.start_game()
