@@ -3,23 +3,27 @@ from game_display import GameDisplay, CELL_SIZE
 from game_utils import get_random_apple_data, UP,DOWN,LEFT,RIGHT
 from snake import Snake
 from apple import Apple
-
+import math
 
 class SnakeGame:
 
-    def __init__(self,width,height, max_apples) -> None:
+    def __init__(self,width = 40,height = 30, max_apples = 3, debug = False) -> None:#add1.2
         self.width = width
         self.height = height
         self.apple_count = 0
         self.max_apples = max_apples
+        self.debug = debug
         self.apples = []
         self.snake = None
         self.__key_clicked = None
         self._is_over = False
+        self.apple_locations = []
+        self.score = 0
 
     def start_game(self):
         self.snake = Snake("black", 3, UP, (self.width//2,self.height//2))
         self.apples.append(Apple("green", CELL_SIZE, get_random_apple_data()))
+        self.apple_locations.append(self.apples[0].location)
         self.apple_count += 1
 
     def read_key(self, key_clicked: Optional[str]) -> None:
@@ -28,28 +32,45 @@ class SnakeGame:
     def single_round(self, gd:GameDisplay):
         if self.__key_clicked:
             self.snake.change_direction(self.__key_clicked)
+        if self.snake.growth > 0:
+            self.snake.grow_snake()
         self.snake.move_snake()
+        if self.snake.location in self.apple_locations:#if snake eat apple#change score and remove apple
+            self.eat_apple(gd)
         if self.apple_count < self.max_apples:
-            loc = get_random_apple_data()
-            if loc not in self.snake.locations and loc not in \
-                    [apple.location for apple in self.apples]:
-                self.apples.append(Apple("green", CELL_SIZE, loc))
-                self.apple_count += 1
-        self.draw_snake(gd)
-        self.draw_apple(gd)
+            self.add_apple()
+        if not self.debug:
+            self.draw_snake(gd)
+        self.draw_apples(gd)
 
+    def eat_apple(self, gd:GameDisplay):
+        self.score += math.floor(math.sqrt(len(self.snake.locations)))
+        gd.show_score(self.score)
+        self.snake.growth += 3
+        for apple in self.apples:
+            if apple.location == self.snake.location:
+                self.apples.remove(apple)
+                self.apple_locations.remove(apple.location)
+                break
+        self.apple_count -= 1
+
+    def add_apple(self):
+        loc = get_random_apple_data()
+        if loc not in self.snake.locations and loc not in self.apple_locations:
+            new_apple = Apple("green", CELL_SIZE, loc)
+            self.apples.append(new_apple)
+            self.apple_locations.append(new_apple.location)
+            self.apple_count += 1
 
     def draw_snake(self, gd: GameDisplay) -> None:
         # draw snake
         for location in self.snake.locations:
             gd.draw_cell(location[0], location[1], self.snake.color)
 
-    def draw_apple(self,gd: GameDisplay):
+    def draw_apples(self,gd: GameDisplay):
         # draw apple
-        print(len(self.apples))
-        for apple in self.apples:
-            gd.draw_cell(apple.location[0], apple.location[1],
-                         apple.color)
+      for apple in self.apples:
+            gd.draw_cell(apple.location[0], apple.location[1],apple.color)
 
     def end_round(self) -> None:
         collision = self.snake.self_collision()

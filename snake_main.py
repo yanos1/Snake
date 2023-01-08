@@ -7,15 +7,15 @@ from game_display import GameDisplay
 
 
 def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
-    #####check
     # INIT OBJECTS
-    game = SnakeGame(args.width, args.height, args.apples)
+    print(args.debug)
+    game = SnakeGame(args.width, args.height, args.apples, args.debug)#add
     game.start_game()
     gd.show_score(0)
 
     # DRAW initial BOARD
     game.draw_snake(gd)
-    game.draw_apple(gd)
+    game.draw_apples(gd)
     # END OF ROUND 0
     while not game.is_over():
         # CHECK KEY CLICKS

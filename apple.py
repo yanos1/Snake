@@ -5,6 +5,7 @@ class Apple:
         self.color = color
         self.size = size
         self.location = location
+
 """
     def insert_apple(self):
         return get_random_apple_data()

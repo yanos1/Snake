@@ -9,28 +9,25 @@ class Snake:
         self.direction = direction
         self.location = location
         self.locations = self.build_snake(location)
+        self.growth = 0
 
     def build_snake(self,location, direction=UP, snake_length=3):
-        if direction == UP:
-            return [(location[0], location[1] - i) for i in range(snake_length)]
-        elif direction == DOWN:
-            return [(location[0], location[1] + i) for i in range(snake_length)]
-        elif direction == RIGHT:
-            return [(location[0] - i, location[1]) for i in range(snake_length)]
-        elif direction == LEFT:
-            return [(location[0] + i, location[1]) for i in range(snake_length)]
+        return [(location[0], location[1] - i) for i in range(snake_length)]
+
+    def add_head(self):
+        if self.direction == UP:
+            self.location = (self.location[0], self.location[1] + 1)
+        elif self.direction == DOWN:
+            self.location = (self.location[0], self.location[1] - 1)
+        elif self.direction == RIGHT:
+            self.location = (self.location[0] + 1, self.location[1])
+        else:
+            self.location = (self.location[0] - 1, self.location[1])
+            # actual movement
+        self.locations.insert(0, self.location)
 
     def move_snake(self):
-        if self.direction == UP:
-            self.location = (self.location[0],self.location[1]+1)
-        elif self.direction == DOWN:
-            self.location = (self.location[0],self.location[1]-1)
-        elif self.direction == RIGHT:
-            self.location = (self.location[0]+1,self.location[1])
-        else:
-            self.location = (self.location[0]-1,self.location[1])
-        # actual movement
-        self.locations.insert(0,self.location)
+        self.add_head()
         self.locations.pop()
 
     def possible_moves(self) -> List:
@@ -52,6 +49,9 @@ class Snake:
             return True
         return False
 
+    def grow_snake(self):
+        self.add_head()
+        self.growth -= 1
 
 
 
