@@ -8,8 +8,8 @@ from game_display import GameDisplay
 
 def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
     # INIT OBJECTS
-    print(args.debug)
-    game = SnakeGame(args.width, args.height, args.apples, args.debug)#add
+    game = SnakeGame(args.width, args.height, args.apples, args.debug,
+                     args.walls, args.rounds)
     game.start_game()
     gd.show_score(0)
 
