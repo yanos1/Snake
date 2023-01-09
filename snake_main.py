@@ -12,9 +12,9 @@ def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
     gd.show_score(0)
 
     # DRAW initial BOARD
-    game.draw_snake(gd)
-    game.draw_apples(gd)
-    game.draw_walls(gd)
+    # game.draw_snake(gd)
+    # game.draw_apples(gd)
+    # game.draw_walls(gd)
     # END OF ROUND 0
     while not game.is_over():
         # CHECK KEY CLICKS

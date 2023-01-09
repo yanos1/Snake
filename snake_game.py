@@ -43,26 +43,27 @@ class SnakeGame:
 
         if self.__key_clicked:
             self.snake.change_direction(self.__key_clicked)
-        if self.snake.growth > 0:
-            self.snake.grow_snake()
         self.check_walls()
-        self.wall_snake(gd)
-        if self.snake.location in self.apple_locations:
-            self.eat_apple(gd)
-        if self.snake.growth == 0:
-            self.snake.move_snake()
-        if self.rounds % 2 == 0:
-            self.move_walls()
-        if self.wall_count < self.max_walls:
-            self.add_wall()
-        if self.apple_count < self.max_apples:
-            self.add_apple()
-        if self.wall_apple():
-            self.add_apple()
-        if not self.debug:
-            self.draw_snake(gd)
-        self.draw_apples(gd)
-        self.draw_walls(gd)
+        if self.rounds > 0:
+            if self.snake.growth > 0:
+                self.snake.grow_snake()
+            if self.snake.growth == 0:
+                self.snake.move_snake()
+            if self.rounds % 2 == 0:
+                self.move_walls()
+            self.wall_snake(gd)
+            if self.wall_apple():
+                self.add_apple()
+            if self.snake.location in self.apple_locations:
+                self.eat_apple(gd)
+            if self.wall_count < self.max_walls:
+                self.add_wall()
+            if self.apple_count < self.max_apples:
+                self.add_apple()
+            if not self.debug:
+                self.draw_snake(gd)
+            self.draw_apples(gd)
+            self.draw_walls(gd)
 
     def eat_apple(self, gd: GameDisplay):
         self.score += math.floor(math.sqrt(len(self.snake.locations)))
