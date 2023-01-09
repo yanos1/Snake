@@ -4,8 +4,6 @@ from snake_game import SnakeGame
 from game_display import GameDisplay
 
 
-
-
 def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
     # INIT OBJECTS
     game = SnakeGame(args.width, args.height, args.apples, args.debug,
@@ -16,6 +14,7 @@ def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
     # DRAW initial BOARD
     game.draw_snake(gd)
     game.draw_apples(gd)
+    game.draw_walls(gd)
     # END OF ROUND 0
     while not game.is_over():
         # CHECK KEY CLICKS

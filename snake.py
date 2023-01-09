@@ -1,9 +1,9 @@
-from game_utils import UP, DOWN, LEFT,RIGHT
-from typing import *
+from game_utils import UP, DOWN, LEFT, RIGHT
+from typing import Any, List
 
 
 class Snake:
-    def __init__(self,color, size, direction, location) -> None:
+    def __init__(self, color, size, direction, location) -> None:
         self.color = color
         self.size = size
         self.direction = direction
@@ -11,7 +11,8 @@ class Snake:
         self.locations = self.build_snake(location)
         self.growth = 0
 
-    def build_snake(self,location, direction=UP, snake_length=3):
+    @staticmethod
+    def build_snake(location, snake_length=3):
         return [(location[0], location[1] - i) for i in range(snake_length)]
 
     def add_head(self):
@@ -32,11 +33,10 @@ class Snake:
 
     def possible_moves(self) -> List:
         if self.direction == UP or self.direction == DOWN:
-            self.pos_moves = [RIGHT,LEFT]
-        elif self.direction == RIGHT or self.direction == LEFT:
-            self.pos_moves  = [UP,DOWN]
-        return self.pos_moves
-
+            pos_moves = [RIGHT, LEFT]
+        else: # Right, or left
+            pos_moves = [UP, DOWN]
+        return pos_moves
 
     def change_direction(self, move_key):
         if move_key in self.possible_moves():
