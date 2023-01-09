@@ -9,7 +9,7 @@ from wall import Wall
 class SnakeGame:
 
     def __init__(self,width = 40,height = 30, max_apples = 3, debug = False,
-                 max_walls = NUM_OF_WALLS, rounds = -1 ) -> None:
+                 max_walls = 3, rounds = -1 ) -> None:
         self.width = width
         self.height = height
         self.max_apples = max_apples
@@ -29,11 +29,14 @@ class SnakeGame:
 
     def start_game(self):
         self.snake = Snake("black", 3, UP, (self.width//2,self.height//2))
-        self.apples.append(Apple("green", CELL_SIZE,get_random_apple_data()))
-        self.apple_locations.append(self.apples[0].location)
-        self.apple_count += 1
-        self.wall = Wall(3, "blue")
-        self.walls.append(self.wall)
+        if self.apple_count > 0:
+            self.apples.append(Apple("green", CELL_SIZE,get_random_apple_data()))
+            self.apple_locations.append(self.apples[0].location)
+            self.apple_count += 1
+        if self.wall_count > 0:
+            self.wall = Wall(3, "blue")
+            self.wall_count += 1
+            self.walls.append(self.wall)
 
     def read_key(self, key_clicked: Optional[str]) -> None:
         self.__key_clicked = key_clicked
@@ -54,8 +57,11 @@ class SnakeGame:
             self.move_walls()
         if self.apple_count < self.max_apples:
             self.add_apple()
+        if self.wall_apple():
+            self.add_apple()
         if not self.debug:
             self.draw_snake(gd)
+        self.wall_snake(gd)
         self.draw_apples(gd)
         self.draw_wall(gd)
         self.rounds += 1
@@ -102,6 +108,10 @@ class SnakeGame:
             if self.snake.location in wall.locations:
                 self._is_over = True
                 self.snake.locations = []
+            if wall.locations[0] == self.snake.locations:
+                self._is_over = True
+        if len(self.snake.locations) == 1:
+            self._is_over = True
 
     def is_over(self) -> bool:
         return self._is_over
@@ -109,8 +119,8 @@ class SnakeGame:
     def add_wall(self):
         new_wall = Wall(3, "blue")
         for loc in new_wall.locations:
-            if loc in self.snake.locations or loc in self.apple_locations \
-                or loc in [wall.locations for wall in self.walls]:
+            if loc in self.snake.locations or loc in self.apple_locations:
+                #or loc in [wall.locations for wall in self.walls]:
                 return
         self.walls.append(new_wall)
         self.wall_count += 1
@@ -124,3 +134,18 @@ class SnakeGame:
     def move_walls(self):
         for wall in self.walls:
             wall.move_wall()
+
+    def wall_apple(self):
+        for wall in self.walls:
+            if wall.locations[0] in self.apple_locations:
+                self.apple_locations.remove(wall.locations[0])
+                return True
+        return False
+
+    def wall_snake(self, gd: GameDisplay):
+        for wall in self.walls:
+            if wall.locations[0] in self.snake.locations[1:]:
+                gd.draw_cell(wall.location[0], wall.location[1], wall.color)
+                idx = self.snake.locations.index(wall.locations[0])
+                self.snake.locations = self.snake.locations[:idx]
+
