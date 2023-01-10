@@ -215,7 +215,7 @@ def parse_args(argv:List[str])->Namespace:
     return parser.parse_args(argv)
 
 
-def setup_game(args:Namespace)->GameDisplay:
+def setup_game(args: Namespace)->GameDisplay:
     game_utils.set_random_seed(args.__dict__.pop('seed'))
     game_utils.set_verbose(args.verbose)
     game_utils.set_size(width=args.width,
@@ -225,6 +225,7 @@ def setup_game(args:Namespace)->GameDisplay:
                        delay=args.__dict__.pop('delay'),
                        verbose=args.__dict__.pop('verbose'),
                        args=args)
+
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])

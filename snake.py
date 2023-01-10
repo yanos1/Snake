@@ -11,9 +11,8 @@ class Snake:
         self.locations = self.build_snake(location)
         self.growth = 0
 
-    @staticmethod
-    def build_snake(location, snake_length=3):
-        return [(location[0], location[1] - i) for i in range(snake_length)]
+    def build_snake(self, location):
+        return [(location[0], location[1] - i) for i in range(self.size)]
 
     def add_head(self):
         if self.direction == UP:

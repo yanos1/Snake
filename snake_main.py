@@ -8,9 +8,12 @@ def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
     # INIT OBJECTS
     game = SnakeGame(args.width, args.height, args.apples, args.debug,
                      args.walls, args.rounds)
-    game.start_game()
+    game.start_game(gd)
+    if args.rounds == 0:
+        return
     gd.show_score(0)
-
+    game.end_round()
+    gd.end_round()
     # DRAW initial BOARD
     # game.draw_snake(gd)
     # game.draw_apples(gd)
@@ -23,10 +26,10 @@ def main_loop(gd: GameDisplay, args: argparse.Namespace) -> None:
         # Draw and move objects
         game.single_round(gd)
         # WAIT FOR NEXT ROUND:
-        game.end_round()
         gd.end_round()
 
 
 if __name__ == "__main__":
     print("You should run:\n"
           "> python game_display.py")
+    print(main_loop())
